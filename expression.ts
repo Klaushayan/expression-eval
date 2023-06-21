@@ -2,13 +2,20 @@ import { Tokenizer } from "./tokenizer";
 import { evaluateBinaryOperation } from "./utils";
 import { Operator } from "./types";
 
-export class Expression {
-  private readonly tokenizer: Tokenizer;
+export abstract class Expression {
+  protected readonly tokenizer: Tokenizer;
 
-  constructor(expr: string, tokenizer?: Tokenizer) {
-    this.tokenizer = tokenizer || new Tokenizer(expr);
+  constructor(tokenizer: Tokenizer, expression?: string) {
+    this.tokenizer = tokenizer;
+    if (expression !== undefined) {
+      this.tokenizer.setExpression(expression);
+    }
   }
 
+  abstract evaluate(): number[];
+}
+
+export class DefaultExpression extends Expression {
   public evaluate(): number[] {
     const tokenized = this.tokenizer.tokenize();
 
@@ -35,8 +42,12 @@ export class Expression {
     const results: number[] = [];
 
     for (let i = 1; i < tokenized.length; i += 2) {
-      const leftExpr = new Expression(tokenized.slice(0, i).join(""));
-      const rightExpr = new Expression(tokenized.slice(i + 1).join(""));
+      const leftTokenizer = this.tokenizer.clone();
+      leftTokenizer.setExpression(tokenized.slice(0, i).join(""));
+      const leftExpr = new DefaultExpression(leftTokenizer);
+      const rightTokenizer = this.tokenizer.clone();
+      rightTokenizer.setExpression(tokenized.slice(i + 1).join(""));
+      const rightExpr = new DefaultExpression(rightTokenizer);
 
       const leftResults = leftExpr.evaluate();
       const rightResults = rightExpr.evaluate();

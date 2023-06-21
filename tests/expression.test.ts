@@ -1,28 +1,32 @@
 import { expect } from "chai";
-import { Expression } from "../expression";
-import { Tokenizer } from "../tokenizer";
+import { DefaultExpression } from "../expression";
+import { DefaultTokenizer } from "../tokenizer";
 import * as utils from "../utils";
 
 // all tests are in one file for simplicity
 
 describe("Expression", () => {
   it("calculates 2*3-4-5", () => {
-    const expr = new Expression("2*3-4-5");
+    const tokenizer = new DefaultTokenizer("2*3-4-5");
+    const expr = new DefaultExpression(tokenizer);
     expect(expr.evaluate()).to.deep.equal([8, -12, 7, -7, -3]);
   });
 
   it("calculates 2*3-4/2", () => {
-    const expr = new Expression("2*3-4/2");
+    const tokenizer = new DefaultTokenizer("2*3-4/2");
+    const expr = new DefaultExpression(tokenizer);
     expect(expr.evaluate()).to.deep.equal([2, -1, 4, -1, 1]);
   });
 
   it("calculates 22*3-4/2", () => {
-    const expr = new Expression("22*3-4/2");
+    const tokenizer = new DefaultTokenizer("22*3-4/2");
+    const expr = new DefaultExpression(tokenizer);
     expect(expr.evaluate()).to.deep.equal([22, -11, 64, -11, 31]);
   });
 
   it("returns empty on an invalid expression", () => {
-    const expr = new Expression("(2)*3-4/b+");
+    const tokenizer = new DefaultTokenizer("2*3-4/b+");
+    const expr = new DefaultExpression(tokenizer);
     expect(expr.evaluate()).to.deep.equal([])
   });
 
@@ -30,7 +34,7 @@ describe("Expression", () => {
 
 describe("Tokenizer", () => {
   it("tokenizes 2*3-4-5", () => {
-    var tokenized = new Tokenizer("2*3-4-5").tokenize();
+    var tokenized = new DefaultTokenizer("2*3-4-5").tokenize();
     expect(tokenized).to.deep.equal(["2", "*", "3", "-", "4", "-", "5"]);
   });
 });
