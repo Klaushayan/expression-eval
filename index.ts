@@ -1,10 +1,12 @@
-import { Expression } from "./expression";
+import { DefaultExpression, } from "./expression";
+import { DefaultTokenizer } from "./tokenizer";
 import { isValidExpression } from "./utils";
 
 
 function run(...args: string[]) {
   try {
-    const expr = new Expression(args.join(""));
+    const tokenizer = new DefaultTokenizer(args.join(""));
+    const expr = new DefaultExpression(tokenizer);
     console.log(expr.evaluate());
   } catch (error: any) {
     console.error(`Error: ${error.message}`)
