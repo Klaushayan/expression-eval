@@ -1,31 +1,43 @@
 export class Tokenizer {
-  private expr: string;
+  private expression: string;
 
-  constructor(expr: string) {
-    this.expr = expr;
+  constructor(expression: string) {
+    this.expression = expression;
   }
 
   public tokenize(): string[] {
-    const res: string[] = [];
-    let num = "";
-    for (const c of this.expr) {
-      if (c === "+" || c === "-" || c === "*" || c === "/") {
-        if (num !== "") {
-          res.push(num);
-          num = "";
+    const tokens: string[] = [];
+    let currentNumber = "";
+
+    for (const character of this.expression) {
+      if (isOperator(character)) {
+        if (currentNumber !== "") {
+          tokens.push(currentNumber);
+          currentNumber = "";
         }
-        res.push(c);
+        tokens.push(character);
       } else {
-        num += c;
+        currentNumber += character;
       }
     }
-    if (num !== "") {
-      res.push(num);
+
+    if (currentNumber !== "") {
+      tokens.push(currentNumber);
     }
-    return res;
+
+    return tokens;
   }
 
-  public setExpression(expr: string): void {
-    this.expr = expr;
+  public setExpression(expression: string): void {
+    this.expression = expression;
   }
+}
+
+function isOperator(character: string): boolean {
+  return (
+    character === "+" ||
+    character === "-" ||
+    character === "*" ||
+    character === "/"
+  );
 }
