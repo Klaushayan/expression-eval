@@ -1,13 +1,11 @@
 import { Tokenizer } from "./tokenizer";
 import { evaluateBinaryOperation } from "./utils";
-import { Operator, Operand } from "./types";
+import { Operator } from "./types";
 
 export class Expression {
-  private readonly expr: string;
   private readonly tokenizer: Tokenizer;
 
   constructor(expr: string, tokenizer?: Tokenizer) {
-    this.expr = expr;
     this.tokenizer = tokenizer || new Tokenizer(expr);
   }
 

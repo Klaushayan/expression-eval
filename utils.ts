@@ -1,22 +1,59 @@
-import { Operator, Operand } from "./types";
+import { Operator } from "./types";
+
+interface BinaryOperation {
+  evaluate(left: number, right: number): number | undefined;
+}
+
+class AddOperation implements BinaryOperation {
+  evaluate(left: number, right: number): number {
+    return left + right;
+  }
+}
+
+class SubtractOperation implements BinaryOperation {
+  evaluate(left: number, right: number): number {
+    return left - right;
+  }
+}
+
+class MultiplyOperation implements BinaryOperation {
+  evaluate(left: number, right: number): number {
+    return left * right;
+  }
+}
+
+class DivideOperation implements BinaryOperation {
+  evaluate(left: number, right: number): number | undefined {
+    if (right === 0) {
+      return undefined; // division by zero
+    }
+    return left / right;
+  }
+}
 
 export function evaluateBinaryOperation(
-  a: Operand,
-  op: Operator,
-  b: Operand
-): Operand | undefined {
-  switch (op) {
+  left: number,
+  operator: Operator,
+  right: number
+): number | undefined {
+  let operation: BinaryOperation;
+  switch (operator) {
     case "+":
-      return a + b;
+      operation = new AddOperation();
+      break;
     case "-":
-      return a - b;
+      operation = new SubtractOperation();
+      break;
     case "*":
-      return a * b;
+      operation = new MultiplyOperation();
+      break;
     case "/":
-      return b === 0 ? undefined : a / b; // avoid division by zero
+      operation = new DivideOperation();
+      break;
     default:
-      throw new Error(`Invalid operator ${op}`);
+      throw new Error(`Unknown operator ${operator}`);
   }
+  return operation.evaluate(left, right);
 }
 
 export function isValidExpression(expression: string): boolean {
