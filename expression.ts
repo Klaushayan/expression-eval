@@ -2,11 +2,6 @@ import { Tokenizer } from "./tokenizer";
 import { evaluateBinaryOperation } from "./utils";
 import { Operator } from "./types";
 
-const TOKENIZED_LENGTH = {
-  SINGLE_NUMBER: 1,
-  BINARY_OPERATION: 3,
-};
-
 export class Expression {
   private readonly tokenizer: Tokenizer;
 
@@ -21,11 +16,11 @@ export class Expression {
       return [];
     }
 
-    if (tokenized.length === TOKENIZED_LENGTH.SINGLE_NUMBER) {
+    if (tokenized.length === 1) {
       return [parseInt(tokenized[0])];
     }
 
-    if (tokenized.length === TOKENIZED_LENGTH.BINARY_OPERATION) {
+    if (tokenized.length === 3) {
       const num = evaluateBinaryOperation(
         parseInt(tokenized[0]),
         tokenized[1] as Operator,
